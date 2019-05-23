@@ -1,0 +1,225 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: OpenAPI Example
+servers:
+  - url: http://localhost:8080/openapi/v1
+tags:
+  - name: users
+    description: Operations about users
+  - name: tokens
+    description: Operations about authorization tokens
+paths:
+  /user:
+    get:
+      operationId: findAuthorizedUser
+      summary: Find an authorized user
+      description: ''
+      tags:
+        - users
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: userName
+          required: true
+          description: ''
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+    post:
+      operationId: createUser
+      summary: Create a new user
+      description: ''
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: userName
+          required: true
+          description: ''
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+    put:
+      operationId: updateAuthorizedUser
+      summary: Update an authorized user
+      description: ''
+      tags:
+        - users
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: userName
+          required: true
+          description: ''
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+  /users/{userName}:
+    get:
+      operationId: findUserByUserName
+      summary: Find a user by user name
+      description: ''
+      tags:
+        - users
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: userName
+          required: true
+          description: ''
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+  /users:
+    get:
+      operationId: findAllUsers
+      summary: Find all users
+      description: ''
+      tags:
+        - users
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+  /tokens/refresh:
+    post:
+      operationId: refreshTokens
+      summary: Refresh tokens
+      description: ""
+      tags:
+        - tokens
+      security:
+        - Bearer:
+            []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tokens"
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        400:
+          description: Bad request
+        401:
+          description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          example: user name
+        email:
+          type: string
+          example: hoge@fuga.com
+        phoneNumber:
+          type: string
+          example: 0123456789012
+      required:
+        - name
+    Tokens:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTcyMzkwMjJ9.k_SimHta0DlhbRkKZIrtKFczsXac9YID1Vwz2O3suuI
+        refreshToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTcyMzkwMjJ9.k_SimHta0DlhbRkKZIrtKFczsXac9YID1Vwz2O3suuI
+      required:
+        - access_token
+        - refresh_token
