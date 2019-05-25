@@ -78,13 +78,6 @@ paths:
         - users
       security:
         - Bearer: []
-      parameters:
-        - in: path
-          name: userName
-          required: true
-          description: ''
-          schema:
-            type: string
       responses:
         200:
           description: OK
