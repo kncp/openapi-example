@@ -22,9 +22,18 @@ if [ ! -d "${APP_DIR}" ]; then
   APP_DIR=`cd "${APP_DIR}"; pwd`
 fi
 
-executable="npx openapi-generator"
+executable="node_modules/@openapitools/openapi-generator-cli/bin/openapi-generator"
 
-ags="generate -i openapi.yml -g swift4 -c ./ios-client.json -o dist/ios-client $@"
+SPEC="openapi.yml"
+GENERATOR="swift4"
+STUB_DIR="dist/ios-client"
+CONFIG="ios-client.json"
+
+if [ ! -f $executable ]; then
+  npm install
+fi
+
+ags="generate -i $SPEC -g $GENERATOR -c $CONFIG -o $STUB_DIR $@"
 
 $executable $ags
 
