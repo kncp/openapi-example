@@ -20,9 +20,8 @@ fi
 executable="node_modules/@openapitools/openapi-generator-cli/bin/openapi-generator"
 
 SPEC="openapi.yml"
-GENERATOR="java"
-STUB_DIR="dist/android-client"
-CONFIG="android-client.json"
+GENERATOR="go-server"
+STUB_DIR="dist/go-server"
 
 if [ ! -f $executable ]; then
   npm install
@@ -30,6 +29,7 @@ fi
 
 rm -rf $STUB_DIR
 
-ags="generate -i $SPEC -g $GENERATOR -c $CONFIG -o $STUB_DIR -DuseRxJava=true,hideGenerationTimestamp=true $@"
+ags="generate -i $SPEC -g $GENERATOR -o $STUB_DIR -DpackageName=go-server --additional-properties hideGenerationTimestamp=true -Dservice $@"
 
 $executable $ags
+
