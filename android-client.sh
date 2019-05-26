@@ -17,8 +17,17 @@ if [ ! -d "${APP_DIR}" ]; then
   APP_DIR=`cd "${APP_DIR}"; pwd`
 fi
 
-executable="npx openapi-generator"
+executable="node_modules/@openapitools/openapi-generator-cli/bin/openapi-generator"
 
-ags="generate -i openapi.yml -g java -c android-client.json -o dist/android-client -DuseRxJava=true,hideGenerationTimestamp=true $@"
+SPEC="openapi.yml"
+GENERATOR="java"
+STUB_DIR="dist/android-client"
+CONFIG="android-client.json"
+
+if [ ! -f $executable ]; then
+  npm install
+fi
+
+ags="generate -i $SPEC -g $GENERATOR -c $CONFIG -o $STUB_DIR -DuseRxJava=true,hideGenerationTimestamp=true $@"
 
 $executable $ags

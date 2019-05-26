@@ -5,11 +5,70 @@ info:
 servers:
   - url: http://localhost:8080/openapi/v1
 tags:
+  - name: versions
+    description: Get mobile application versions
+  - name: devices
+    description: Operation about devices
   - name: users
     description: Operations about users
   - name: tokens
     description: Operations about authorization tokens
 paths:
+  /versions:
+    get:
+      operationId: getVersions
+      summary: Return a latest version and a required version
+      description: ''
+      tags:
+        - versions
+      parameters:
+        - in: query
+          name: os
+          required: true
+          description: ''
+          schema:
+            type: string
+            enum:
+              - android
+              - ios
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Versions'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+  /device:
+    post:
+      operationId: registerDeviceToken
+      summary: Register device token for push notification
+      description: ''
+      tags:
+        - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
   /user:
     get:
       operationId: findAuthorizedUser
@@ -19,13 +78,6 @@ paths:
         - users
       security:
         - Bearer: []
-      parameters:
-        - in: path
-          name: userName
-          required: true
-          description: ''
-          schema:
-            type: string
       responses:
         200:
           description: OK
@@ -63,10 +115,12 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         400:
           description: Bad request
-        401:
-          description: Access token is missing or invalid
         500:
           description: Internal server error
         503:
@@ -94,10 +148,39 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         400:
           description: Bad request
         401:
           description: Access token is missing or invalid
+        500:
+          description: Internal server error
+        503:
+          description: Under maintenance
+  /user/login:
+    post:
+      operationId: loginUser
+      summary: Login user by user's credential
+      description: ''
+      tags: 
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credential'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationTokens'
+        400:
+          description: Bad request
         500:
           description: Internal server error
         503:
@@ -173,7 +256,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Tokens"
+              $ref: "#/components/schemas/AuthorizationTokens"
         required: true
       responses:
         200:
@@ -181,7 +264,7 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/Tokens"
+                $ref: "#/components/schemas/AuthorizationTokens"
         400:
           description: Bad request
         401:
@@ -211,7 +294,7 @@ components:
           example: 0123456789012
       required:
         - name
-    Tokens:
+    AuthorizationTokens:
       type: object
       properties:
         accessToken:
@@ -223,3 +306,31 @@ components:
       required:
         - access_token
         - refresh_token
+    Versions:
+      type: object
+      properties:
+        latestVersion: 
+          type: string
+          example: 2.0.0
+        requiredVersion: 
+          type: string
+          example: 1.0.0
+      required:
+        - latestVersion
+        - requiredVersion
+    Credential:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: jenkins
+        password:
+          type: string
+          example: strongestPasswordAllOverTheWorld12345!
+    Device:
+      type: object
+      properties:
+        token:
+          type: string
+          example: thisIsDeviceTokenForPushNotification
+
