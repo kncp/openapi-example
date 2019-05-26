@@ -33,6 +33,8 @@ if [ ! -f $executable ]; then
   npm install
 fi
 
+rm -rf $STUB_DIR
+
 ags="generate -i $SPEC -g $GENERATOR -c $CONFIG -o $STUB_DIR $@"
 
 $executable $ags
