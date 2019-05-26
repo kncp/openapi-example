@@ -1,11 +1,13 @@
 #!/bin/sh
 
+SCRIPT="$0"
+
+echo "# START SCRIPT: $SCRIPT"
+
 # backup openapi.yml
 cp openapi.yml openapi.yml.backup
 # remove lines of 'format: int64'
 sed -i '' '/format: int64/d' openapi.yml
-
-SCRIPT="$0"
 
 while [ -h "$SCRIPT" ] ; do
   ls=`ls -ld "$SCRIPT"`
@@ -32,6 +34,8 @@ CONFIG="ios-client.json"
 if [ ! -f $executable ]; then
   npm install
 fi
+
+echo "Removing files and folders under $STUB_DIR"
 
 rm -rf $STUB_DIR
 
