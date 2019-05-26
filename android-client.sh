@@ -2,6 +2,8 @@
 
 SCRIPT="$0"
 
+echo "# START SCRIPT: $SCRIPT"
+
 while [ -h "$SCRIPT" ] ; do
   ls=`ls -ld "$SCRIPT"`
   link=`expr "$ls" : '.*-> \(.*\)$'`
@@ -27,6 +29,8 @@ CONFIG="android-client.json"
 if [ ! -f $executable ]; then
   npm install
 fi
+
+echo "Removing files and folders under $STUB_DIR"
 
 rm -rf $STUB_DIR
 
