@@ -33,7 +33,7 @@ echo "Removing files and folders under $STUB_DIR"
 
 rm -rf $STUB_DIR
 
-ags="generate -i $SPEC -g $GENERATOR -o $STUB_DIR -DpackageName=go-server --additional-properties hideGenerationTimestamp=true -Dservice $@"
+ags="generate -i $SPEC -g $GENERATOR -o $STUB_DIR -DpackageName=goapiserver --additional-properties hideGenerationTimestamp=true -Dservice $@"
 
 $executable $ags
 
