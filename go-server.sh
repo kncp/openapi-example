@@ -22,8 +22,8 @@ fi
 executable="node_modules/@openapitools/openapi-generator-cli/bin/openapi-generator"
 
 SPEC="openapi.yml"
-GENERATOR="go-server"
-STUB_DIR="dist/go-server"
+GENERATOR="go-gin-server"
+STUB_DIR="dist/go-gin-api-server"
 
 if [ ! -f $executable ]; then
   npm install
